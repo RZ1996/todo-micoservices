@@ -1,0 +1,47 @@
+<div class="min-vh-100 d-flex justify-content-center align-items-center">
+  <form class="w-100" style="max-width: 480px;" (ngSubmit)="onSubmit()" #f="ngForm">
+    <h2 class="mb-4 text-center">Create account</h2>
+
+    <div class="mb-3">
+      <input class="form-control"
+             placeholder="Name"
+             name="name"
+             [(ngModel)]="name"
+             required />
+    </div>
+
+    <div class="mb-3">
+      <input class="form-control"
+             placeholder="Surname"
+             name="surname"
+             [(ngModel)]="surname"
+             required />
+    </div>
+
+    <div class="mb-3">
+      <input class="form-control"
+             type="email"
+             placeholder="Email address"
+             name="emailAddress"
+             [(ngModel)]="emailAddress"
+             required />
+    </div>
+
+    <div class="mb-4">
+      <input class="form-control"
+             type="password"
+             placeholder="Password"
+             name="password"
+             [(ngModel)]="password"
+             required />
+    </div>
+
+    <button class="btn btn-primary w-100" type="submit" [disabled]="f.invalid || loading">
+      {{ loading ? 'Creating account…' : 'Register' }}
+    </button>
+
+    <div *ngIf="errorMessage" class="text-danger text-center mt-3 small">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

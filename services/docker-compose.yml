@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  eureka:
+    image: rob27/eureka-server:0.0.1
+    container_name: eureka
+    environment:
+      SERVER_PORT: 8761
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    ports: ["8761:8761"]
+    networks: [todo]
+
+  userservice:
+    image: rob27/userservice:0.0.1
+    container_name: userservice
+    depends_on: [eureka]
+    environment:
+      # MySQL běží na tvém PC → použij host.docker.internal
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/userdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root           # DOSAĎ své údaje
+      SPRING_DATASOURCE_PASSWORD: 271996         # DOSAĎ své heslo
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SERVER_PORT: 9092
+    ports: ["9092:9092"]
+    networks: [todo]
+
+  taskservice:
+    image: rob27/taskservice:0.0.1
+    container_name: taskservice
+    depends_on: [eureka]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/taskdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root           # DOSAĎ své údaje
+      SPRING_DATASOURCE_PASSWORD: 271996         # DOSAĎ své heslo
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SERVER_PORT: 9093
+    ports: ["9093:9093"]
+    networks: [todo]
+
+  frontend:
+    image: rob27/frontend:0.0.1
+    container_name: frontend
+    depends_on: [userservice, taskservice]
+    ports: ["4200:80"]
+    networks: [todo]
+
+networks:
+  todo: { driver: bridge }

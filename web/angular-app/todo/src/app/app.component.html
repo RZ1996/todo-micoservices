@@ -1,0 +1,43 @@
+<nav class="navbar navbar-light bg-light px-3">
+  <!-- značka/brand může vést na /, ale nevystavujeme samostatnou položku Home -->
+  <a class="navbar-brand" routerLink="/">ToDo</a>
+
+  <ul class="navbar-nav ms-auto flex-row align-items-center gap-3">
+    <!-- Veřejné stránky: jen Register + Login -->
+    <ng-container *ngIf="isPublicPage(); else appPages">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+      </li>
+    </ng-container>
+
+    <!-- Aplikace (po přihlášení): Tasks + Account + Logout -->
+    <ng-template #appPages>
+      <ng-container *ngIf="isLoggedIn(); else guestOnAppPages">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/tasks" routerLinkActive="active">Tasks</a>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-link nav-link p-0" (click)="goAccount()">Account</button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
+        </li>
+      </ng-container>
+
+      <!-- pokud by se nepřihlášený omylem ocitl mimo public stránky -->
+      <ng-template #guestOnAppPages>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
+        </li>
+      </ng-template>
+    </ng-template>
+  </ul>
+</nav>
+
+<router-outlet></router-outlet>

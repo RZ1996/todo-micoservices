@@ -1,0 +1,26 @@
+<div class="container py-4">
+  <h2 class="mb-3">My account</h2>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+  <form (ngSubmit)="save()" class="row g-3" style="max-width: 520px;">
+    <div class="col-12">
+      <label class="form-label">Name</label>
+      <input class="form-control" [(ngModel)]="name" name="name" required>
+    </div>
+    <div class="col-12">
+      <label class="form-label">Surname</label>
+      <input class="form-control" [(ngModel)]="surname" name="surname" required>
+    </div>
+    <div class="col-12">
+      <label class="form-label">Email</label>
+      <input class="form-control" [(ngModel)]="email" name="email" type="email" required>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary" type="submit" [disabled]="saving">Save</button>
+      <button class="btn btn-outline-danger ms-auto" type="button" (click)="logout()">Logout</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,31 @@
+<div class="min-vh-100 d-flex justify-content-center align-items-center">
+  <form class="w-100" style="max-width: 420px;" (ngSubmit)="onSubmit()" #f="ngForm">
+    <h2 class="mb-4 text-center">Login</h2>
+
+    <div class="mb-3">
+      <input class="form-control"
+             type="email"
+             placeholder="Email address"
+             name="emailAddress"
+             [(ngModel)]="emailAddress"
+             required />
+    </div>
+
+    <div class="mb-4">
+      <input class="form-control"
+             type="password"
+             placeholder="Password"
+             name="password"
+             [(ngModel)]="password"
+             required />
+    </div>
+
+    <button class="btn btn-primary w-100" type="submit" [disabled]="f.invalid || loading">
+      {{ loading ? 'Signing in...' : 'Sign in' }}
+    </button>
+
+    <div *ngIf="errorMessage" class="text-danger text-center mt-3 small">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>
