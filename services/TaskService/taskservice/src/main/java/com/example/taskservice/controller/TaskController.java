@@ -12,11 +12,19 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(
-        origins = "http://localhost:4200",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS},
-        allowedHeaders = {"Content-Type","Authorization"}
+        origins = {
+                "http://localhost:4200",
+                "http://k8s-todo-todofron-629d1e1f26-57fbf8f5c030f005.elb.eu-central-1.amazonaws.com"
+        },
+        methods = {
+                RequestMethod.GET,
+                RequestMethod.POST,
+                RequestMethod.PATCH,
+                RequestMethod.DELETE,
+                RequestMethod.OPTIONS
+        },
+        allowedHeaders = {"Content-Type", "Authorization"}
 )
-@RequestMapping("/tasks") // třídní prefix
 public class TaskController {
 
     @Autowired
