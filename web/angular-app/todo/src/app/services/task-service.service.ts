@@ -6,7 +6,7 @@ import { Task } from '../models/task';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  private readonly base = environment.taskUrl; // např. http://localhost:9091
+  private readonly base = environment.taskServiceUrl; // např. http://localhost:9091
 
   constructor(private http: HttpClient) {}
 

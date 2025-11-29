@@ -16,8 +16,7 @@ export type UserDTO = Omit<User, 'password'>;
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private readonly base = environment.userUrl; // např. http://localhost:9092
-
+  private readonly base = environment.userServiceUrl;
   private currentUserSubject = new BehaviorSubject<UserDTO | null>(this.readUser());
   currentUser$ = this.currentUserSubject.asObservable();
 
