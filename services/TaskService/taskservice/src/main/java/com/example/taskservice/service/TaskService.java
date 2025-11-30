@@ -26,7 +26,7 @@ public class TaskService {
 
     private static final String USER_SERVICE_BASE = "http://localhost:9092";
 
-    /* ===================== READ ===================== */
+
 
     @Transactional(readOnly = true)
     public TaskDTO findTask(int id) {
@@ -41,11 +41,11 @@ public class TaskService {
         return TaskMapper.INSTANCE.mapTasksToTaskDTOs(tasks);
     }
 
-    /* ===================== CREATE ===================== */
+
 
     @Transactional
     public TaskDTO createTask(Task task) {
-        // validace a defaulty
+
         if (task.getUserId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "userId is required");
         }
@@ -71,37 +71,37 @@ public class TaskService {
         return TaskMapper.INSTANCE.mapTaskToTaskDTO(createdTask);
     }
 
-    /* ===================== UPDATE ===================== */
+
 
     @Transactional
     public TaskDTO updateTask(int id, Task task) {
         Task entity = taskRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + id + " not found"));
 
-        // title
+
         if (task.getTitle() != null) {
             String v = task.getTitle().trim();
             if (!v.isBlank()) entity.setTitle(v);
         }
 
-        // description
+
         if (task.getDescription() != null) {
             String v = task.getDescription().trim();
             if (!v.isBlank()) entity.setDescription(v);
         }
 
-        // userId – když se mění, znovu ověř existenci uživatele
+
         if (task.getUserId() != null && !task.getUserId().equals(entity.getUserId())) {
             ensureUserExists(task.getUserId());
             entity.setUserId(task.getUserId());
         }
 
-        // priority
+
         if (task.getPriority() != null) {
             entity.setPriority(task.getPriority());
         }
 
-        // status + completedAt
+
         if (task.getStatus() != null && task.getStatus() != entity.getStatus()) {
             entity.setStatus(task.getStatus());
             if (task.getStatus() == Task.TaskStatus.DONE) {
@@ -119,7 +119,7 @@ public class TaskService {
         return TaskMapper.INSTANCE.mapTaskToTaskDTO(saved);
     }
 
-    /* ===================== DELETE ===================== */
+
 
     @Transactional
     public void deleteTask(int id) {
@@ -128,19 +128,19 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    /* ===================== HELPERS ===================== */
+
 
     private void ensureUserExists(Integer userId) {
         try {
             restTemplate.getForObject(USER_SERVICE_BASE + "/users/{id}", Void.class, userId);
         } catch (HttpClientErrorException.NotFound ex) {
-            // uživatel neexistuje → srozumitelná 400
+
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User " + userId + " not found");
         } catch (ResourceAccessException ex) {
-            // user-service nedostupný
+
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "User Service unavailable");
         } catch (HttpClientErrorException ex) {
-            // ostatní chyby z user-service přepošli s původním statusem
+
             throw new ResponseStatusException(ex.getStatusCode(), "User Service error: " + ex.getStatusText());
         }
     }

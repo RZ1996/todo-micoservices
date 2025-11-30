@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/tasks")   // <<< TADY PŘIDÁNO
 @CrossOrigin(
         origins = {
                 "http://localhost:4200",
